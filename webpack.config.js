@@ -9,6 +9,7 @@ module.exports = {
 			title: "Todo List",
 		}),
 	],
+	devtool: "inline-source-map",
 	module: {
 		rules: [
 			{
