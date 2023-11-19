@@ -38,22 +38,19 @@ const app = (function() {
         return generateSidebar(getProjects()[lastIndex], lastIndex);
     }
 
-    function generateDashboard(project, id) {
-        const projectCard = document.createElement('div');
-        projectCard.classList.add('project-card');
-        project.todos.forEach((todo) => {
-            const todoCard = document.createElement('div');
-            todoCard.classList.add('todo-card');
-            todoCard.innerHTML = todo.print();
-            projectCard.appendChild(todoCard);
-        });
-        return projectCard;
+    function GenerateTodoCard(todo) {
+        const todoCard = document.createElement('div');
+        todoCard.classList.add('todo-card');
+        todoCard.innerHTML = todo.print();
+        return todoCard;
     }
 
     function updateDisplay() {
         getProjects().forEach((project, id) => {
             dom.sidebar.appendChild(generateSidebar(project, id));
-            dom.dashboard.appendChild(generateDashboard(project, id));
+            project.todos.forEach((todo) => {
+                dom.dashboard.appendChild(GenerateTodoCard(todo));
+            });
         });
     }
 
@@ -71,7 +68,7 @@ const app = (function() {
     addProject('default');
     addProject('second!');
     projects[0].addTodo("First Task", "Our first thing to do!", "Tomorrow", "high");
-    return { updateDisplay, addProject, generateSidebar, getLastProject, getProjects, appendProjectSidebar};
+    return { updateDisplay, addProject, generateSidebar, getLastProject, getProjects, appendProjectSidebar, GenerateTodoCard };
 })();
 
 const dom = (function () {
@@ -79,13 +76,27 @@ const dom = (function () {
     const sidebar = document.getElementById('sidebar');
     const dashboard = document.getElementById('dashboard');
     const modalAddProject = document.getElementById('modal-add-project');
+    const modalAddTodo = document.getElementById('modal-add-todo');
     const buttonAddProject = document.getElementById('button-add-project');
     const buttonSubmitProject = document.getElementById('submit-project');
+    const buttonSubmitTodo = document.getElementById('submit-todo');
     const formAddProject = document.querySelector('#form-add-project');
+    const formAddTodo = document.getElementById('form-add-todo');
 
     const buttonAddTodo = document.createElement('div');
     buttonAddTodo.setAttribute('id', 'addTodo');
+    buttonAddTodo.addEventListener('click', () => {
+        modalAddTodo.showModal();
+    });
     dashboard.appendChild(buttonAddTodo);
+
+    buttonSubmitTodo.addEventListener('click', (button) => {
+        button.preventDefault();
+        if (formAddTodo.checkValidity()) {
+            app.getProjects()[0].addTodo(formAddTodo.elements["todoTitle"].value, formAddTodo.elements["todoDescription"].value, formAddTodo.elements["todoDate"].value, formAddTodo.elements["todoPriority"].value);
+            dom.dashboard.appendChild(app.GenerateTodoCard(app.getProjects()[0].todos[app.getProjects()[0].todos.length - 1]));
+        }
+    });
 
     buttonAddProject.addEventListener('click', () => {
         dom.modalAddProject.showModal();
@@ -99,7 +110,7 @@ const dom = (function () {
             modalAddProject.close();
             formAddProject.reset();
         }
-    })
+    });
 
     return { body, sidebar, dashboard, modalAddProject, buttonAddProject};
 })();

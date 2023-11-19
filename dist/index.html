@@ -16,7 +16,7 @@
         </form>
     </dialog>
     <dialog id="modal-add-todo">
-        <form id="form-add-todo">
+        <form id="form-add-todo" onkeydown="return event.key != 'Enter';">
             <div id="todo-title">
                 <label for="todo-title-input">Title</label>
                 <input type="text" name="todoTitle" id="todo-title-input">
@@ -31,7 +31,7 @@
             </div>
             <div id="todo-priority">
                 <label for="todo-priority-high">High</label>
-                <input type="radio" name="todoPriority" id="todo-priority-high">
+                <input type="radio" name="todoPriority" id="todo-priority-high" checked>
                 <label for="todo-priority-medium">Medium</label>
                 <input type="radio" name="todoPriority" id="todo-priority-medium">
                 <label for="todo-priority-low">Low</label>
