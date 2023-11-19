@@ -3,8 +3,57 @@
     margin: 0;
 }
 
-.home {
+body {
     width: 100vw;
     height: 100vh;
     background-image: linear-gradient(45deg, black, white);
+    display: grid;
+    grid-template: 1fr 8fr / 2fr 15fr;
+}
+
+div {
+    color: white;
+}
+
+#heading {
+    grid-column: 1 / 3;
+    text-align: center;
+    font-size: 3rem;
+}
+
+#sidebar {
+    display: flex;
+    flex-direction: column;
+    font-size: 2rem;
+}
+
+#sidebar > button {
+    font-size: 2rem;
+}
+
+.project-view {
+    background-color: rgba(0, 0, 255, 0.424);
+}
+
+.project-idle {
+    background-color: rgba(0, 0, 255, 0.148);
+}
+
+#dashboard {
+    display: flex;
+    flex-wrap: wrap;
+    height: fit-content;
+}
+
+#addTodo {
+    background-color: aquamarine;
+    order: 1;
+    flex: 1 1 auto;
+    min-height: max(5vh, 5vw);
+    min-width: max(5vh, 5vw);
+}
+
+.todo-title, .todo-due-date, .todo-priority {
+    text-align: center;
+    
 }
