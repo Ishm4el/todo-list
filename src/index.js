@@ -90,7 +90,7 @@ const app = (function() {
             console.log(getProjects()[getViewingProject()].todos.length);
             getProjects()[getViewingProject()].removeTodo(todo);
             console.log(getProjects()[getViewingProject()].todos.length);
-            dom.resetDashboard();
+            dom.getDashboard().removeChild(todoCard);
         });
         return todoCard;
     }
