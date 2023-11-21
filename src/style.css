@@ -44,6 +44,10 @@ div {
     background-color: rgba(0, 0, 255, 0.148);
 }
 
+.project-tab-selected {
+    background-color: cadetblue;
+}
+
 #dashboard {
     display: flex;
     flex-wrap: wrap;

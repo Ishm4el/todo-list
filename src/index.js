@@ -61,9 +61,12 @@ const app = (function() {
         projectTab.innerHTML = `${project.getName()}`;
         projectTab.addEventListener('click', () => {
             dom.resetDashboard();
-            console.log(viewingProject);
+            if(dom.getBody().contains(dom.getBody().querySelector('.project-tab-selected'))) {
+                console.log('in');
+                dom.body.querySelector('.project-tab-selected').classList.remove('project-tab-selected');
+            } 
+            projectTab.classList.add('project-tab-selected');
             viewingProject = id;
-            console.log(viewingProject);
             project.todos.forEach((todo) => {
                 dom.getDashboard().appendChild(GenerateTodoCard(todo));
             });
@@ -87,9 +90,7 @@ const app = (function() {
             todo.completed = !todo.completed;
         });
         todoCard.getElementsByClassName('todo-icons-delete')[0].addEventListener('click', () => {
-            console.log(getProjects()[getViewingProject()].todos.length);
             getProjects()[getViewingProject()].removeTodo(todo);
-            console.log(getProjects()[getViewingProject()].todos.length);
             dom.getDashboard().removeChild(todoCard);
         });
         return todoCard;
@@ -108,6 +109,8 @@ const app = (function() {
         getProjects().forEach((project, id) => {
             dom.sidebar.appendChild(generateSidebar(project, id));
         });
+        dom.sidebar.children[1].classList.add('project-tab-selected');
+
         projects[0].todos.forEach((todo) => {
             dom.getDashboard().appendChild(GenerateTodoCard(todo));
         });
@@ -184,7 +187,9 @@ const dom = (function () {
         }
     });
 
-    return { body, sidebar, modalAddProject, buttonAddProject, resetDashboard, getDashboard };
+    const getBody = () => body;
+
+    return { body, sidebar, modalAddProject, buttonAddProject, resetDashboard, getDashboard, getBody };
 })();
 
 app.initiateDisplay();
