@@ -11,6 +11,15 @@ const app = (function() {
                 this.description = description;
                 this.dueDate = dueDate;
                 this.priority = priority;
+                this.completed = false;
+            }
+
+            get completed() {
+                return this._completed;
+            }
+            
+            set completed(bool) {
+                this._completed = bool;
             }
         
             print() {
@@ -19,6 +28,11 @@ const app = (function() {
                 <div class='todo-description'>${this.description}</div>
                 <div class='todo-due-date'>Due: ${this.dueDate}</div>
                 <div class='todo-priority'>Priority: ${this.priority}</div>
+                <div class='todo-icons'>
+                    <div class="todo-icons-completed">V</div>
+                    <div class="todo-icons-configure">C</div>
+                    <div class="todo-icons-delete">D</div>
+                </div>
                 `;
             }
         }
@@ -60,6 +74,12 @@ const app = (function() {
         const todoCard = document.createElement('div');
         todoCard.classList.add('todo-card');
         todoCard.innerHTML = todo.print();
+        if (todo.completed)
+            todoCard.classList.add('todo-card-completed');
+        todoCard.getElementsByClassName('todo-icons-completed')[0].addEventListener('click', (completed) => {
+            todoCard.classList.toggle('todo-card-completed');
+            todo.completed = !todo.completed;
+        });
         return todoCard;
     }
 

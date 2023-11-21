@@ -66,3 +66,25 @@ div {
     text-align: center;
     
 }
+
+.todo-icons {
+    display: flex;
+    justify-content: space-around;
+    font-size: max(2vh, 2vw);
+}
+
+.todo-icons-completed {
+    background-color: rgba(0, 128, 0, 0.434);
+}
+
+.todo-icons-configure {
+    background-color: rgb(45, 45, 45);
+}
+
+.todo-icons-delete {
+    background-color: rgba(255, 0, 0, 0.496);
+}
+
+.todo-card-completed {
+    background-color: rgba(172, 255, 47, 0.226);
+}
