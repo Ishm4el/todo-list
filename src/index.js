@@ -1,7 +1,9 @@
 import './style.css';
 const app = (function() {
     const projects = [];
+    const getProjects = () => projects;
     let viewingProject = 0;
+    const getViewingProject = () => viewingProject;
     function Project(name) {
         class TodoItem {
             constructor(title, description, dueDate, priority) {
@@ -27,6 +29,11 @@ const app = (function() {
         return {getName, setName, todos, addTodo};
     }
 
+    function getLastProject(projects) {
+        const lastIndex = --getProjects().length;
+        return {project: projects[lastIndex], lastIndex};
+    }
+
     function generateSidebar(project, id) {
         const projectTab = document.createElement('div');
         projectTab.classList.toggle('project-view');
@@ -34,6 +41,9 @@ const app = (function() {
         projectTab.innerHTML = `${project.getName()}`;
         projectTab.addEventListener('click', () => {
             dom.resetDashboard();
+            console.log(viewingProject);
+            viewingProject = id;
+            console.log(viewingProject);
             project.todos.forEach((todo) => {
                 dom.getDashboard().appendChild(GenerateTodoCard(todo));
             });
@@ -75,18 +85,15 @@ const app = (function() {
         getProjects().push(Project(title));
     }
 
-    function getLastProject(projects) {
-        const lastIndex = --projects.length;
-        return {project: projects[lastIndex], lastIndex};
-    }
+    
 
-    const getProjects = () => projects;
+    
 
     addProject('default');
     addProject('second!');
     projects[0].addTodo("First Task", "Our first thing to do!", "Tomorrow", "high");
     projects[1].addTodo("Second Task", "Our second thing to do!", "Tomorrow", "low");
-    return { initiateDisplay, addProject, generateSidebar, getLastProject, getProjects, appendProjectSidebar, GenerateTodoCard };
+    return { initiateDisplay, addProject, generateSidebar, getLastProject, getProjects, appendProjectSidebar, GenerateTodoCard, getViewingProject };
 })();
 
 const dom = (function () {
@@ -124,8 +131,10 @@ const dom = (function () {
     buttonSubmitTodo.addEventListener('click', (button) => {
         button.preventDefault();
         if (formAddTodo.checkValidity()) {
-            app.getProjects()[0].addTodo(formAddTodo.elements["todoTitle"].value, formAddTodo.elements["todoDescription"].value, formAddTodo.elements["todoDate"].value, formAddTodo.elements["todoPriority"].value);
-            dom.dashboard.appendChild(app.GenerateTodoCard(app.getProjects()[0].todos[app.getProjects()[0].todos.length - 1]));
+            app.getProjects()[app.getViewingProject()].addTodo(formAddTodo.elements["todoTitle"].value, formAddTodo.elements["todoDescription"].value, formAddTodo.elements["todoDate"].value, formAddTodo.elements["todoPriority"].value);
+            dom.getDashboard().appendChild(app.GenerateTodoCard(app.getProjects()[app.getViewingProject()].todos[app.getProjects()[app.getViewingProject()].todos.length - 1]));
+            modalAddTodo.close();
+            formAddTodo.reset();
         }
     });
 
