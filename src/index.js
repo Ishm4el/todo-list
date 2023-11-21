@@ -40,7 +40,13 @@ const app = (function() {
         const getName = () => { return name; };
         const setName = (newName) => { name = newName; };
         const addTodo = (title, description, dueDate, priority) => { todos.push(new TodoItem(title, description, dueDate, priority)) };
-        return {getName, setName, todos, addTodo};
+        const removeTodo = (todo) => {
+            const index = todos.indexOf(todo);
+            if (index > -1)
+                todos.splice(index, 1);
+        }
+
+        return { getName, setName, todos, addTodo, removeTodo };
     }
 
     function getLastProject(projects) {
@@ -79,6 +85,12 @@ const app = (function() {
         todoCard.getElementsByClassName('todo-icons-completed')[0].addEventListener('click', (completed) => {
             todoCard.classList.toggle('todo-card-completed');
             todo.completed = !todo.completed;
+        });
+        todoCard.getElementsByClassName('todo-icons-delete')[0].addEventListener('click', () => {
+            console.log(getProjects()[getViewingProject()].todos.length);
+            getProjects()[getViewingProject()].removeTodo(todo);
+            console.log(getProjects()[getViewingProject()].todos.length);
+            dom.resetDashboard();
         });
         return todoCard;
     }
