@@ -44,9 +44,20 @@ const app = (function() {
             const index = todos.indexOf(todo);
             if (index > -1)
                 todos.splice(index, 1);
-        }
+        };
 
-        return { getName, setName, todos, addTodo, removeTodo };
+        const updateTodo = (todo, newTodo) => {
+            const index = todos.indexOf(todo);
+            if (index > -1) {
+                todos[index].title = newTodo.title;
+                todos[index].description = newTodo.description;
+                todos[index].dueDate = newTodo.dueDate;
+                todos[index].priority = newTodo.priority;
+                todos[index].completed = newTodo.completed;
+            }
+        };
+
+        return { getName, setName, todos, addTodo, removeTodo, updateTodo };
     }
 
     function getLastProject(projects) {
@@ -89,6 +100,46 @@ const app = (function() {
             todoCard.classList.toggle('todo-card-completed');
             todo.completed = !todo.completed;
         });
+        todoCard.getElementsByClassName('todo-icons-configure')[0].addEventListener('click', () => {
+            const modalConfigure = document.getElementById('modal-configure');
+            const formConfigure = modalConfigure.querySelector('#form-configure');
+            formConfigure.querySelector('#configure-title-input').setAttribute('value', todo.title);
+            formConfigure.querySelector('#configure-description-input').setAttribute('value', todo.description);
+
+            formConfigure.querySelector('#configure-date-input').setAttribute('value', todo.dueDate);
+            
+            const configurePriority = formConfigure.querySelector('#configure-priority').children;
+            for (let i = 1; i < configurePriority.length; i = i + 2) {
+                configurePriority[i].removeAttribute('checked');
+                if (JSON.stringify(todo.priority) === JSON.stringify(configurePriority[i].value)) {
+                    configurePriority[i].setAttribute('checked', 'checked');
+                }
+            }
+            modalConfigure.showModal();
+
+            function submitConfigure(button) {
+                button.preventDefault();
+                if (formConfigure.checkValidity()) {
+                    getProjects()[getViewingProject()].updateTodo(todo, {
+                        title: formConfigure.elements["configureTitle"].value,
+                        description: formConfigure.elements["configureDescription"].value,
+                        dueDate: formConfigure.elements["configureDate"].value,
+                        priority: formConfigure.elements["configurePriority"].value,
+                        completed: todo.completed
+                    })
+                    modalConfigure.close();
+                    formConfigure.reset();
+                    console.log(todo);
+                    todoCard.children[0].textContent = todo.title;
+                    todoCard.children[1].textContent = todo.description;
+                    todoCard.children[2].textContent = "Due: " + todo.dueDate;
+                    todoCard.children[3].textContent = "Priority: " + todo.priority;
+                }
+                formConfigure.querySelector('#submit-configure').removeEventListener('click', submitConfigure);
+            }
+
+            formConfigure.querySelector('#submit-configure').addEventListener('click', submitConfigure);
+        })
         todoCard.getElementsByClassName('todo-icons-delete')[0].addEventListener('click', () => {
             getProjects()[getViewingProject()].removeTodo(todo);
             dom.getDashboard().removeChild(todoCard);
@@ -122,12 +173,10 @@ const app = (function() {
 
     
 
-    
-
     addProject('default');
     addProject('second!');
-    projects[0].addTodo("First Task", "Our first thing to do!", "Tomorrow", "high");
-    projects[1].addTodo("Second Task", "Our second thing to do!", "Tomorrow", "low");
+    projects[0].addTodo("First Task", "Our first thing to do!", "1999-01-01", "High");
+    projects[1].addTodo("Second Task", "Our second thing to do!", "1999-01-02", "Low");
     return { initiateDisplay, addProject, generateSidebar, getLastProject, getProjects, appendProjectSidebar, GenerateTodoCard, getViewingProject };
 })();
 
@@ -166,6 +215,7 @@ const dom = (function () {
     buttonSubmitTodo.addEventListener('click', (button) => {
         button.preventDefault();
         if (formAddTodo.checkValidity()) {
+            console.log(formAddTodo.querySelector('input[name="todoPriority"]:checked').value);
             app.getProjects()[app.getViewingProject()].addTodo(formAddTodo.elements["todoTitle"].value, formAddTodo.elements["todoDescription"].value, formAddTodo.elements["todoDate"].value, formAddTodo.elements["todoPriority"].value);
             dom.getDashboard().appendChild(app.GenerateTodoCard(app.getProjects()[app.getViewingProject()].todos[app.getProjects()[app.getViewingProject()].todos.length - 1]));
             modalAddTodo.close();
@@ -189,7 +239,7 @@ const dom = (function () {
 
     const getBody = () => body;
 
-    return { body, sidebar, modalAddProject, buttonAddProject, resetDashboard, getDashboard, getBody };
+    return { body, sidebar, modalAddProject, buttonAddProject, resetDashboard, getDashboard, getBody, formAddTodo };
 })();
 
 app.initiateDisplay();

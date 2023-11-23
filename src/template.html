@@ -31,13 +31,38 @@
             </div>
             <div id="todo-priority">
                 <label for="todo-priority-high">High</label>
-                <input type="radio" name="todoPriority" id="todo-priority-high" checked>
+                <input type="radio" name="todoPriority" id="todo-priority-high" checked value="High">
                 <label for="todo-priority-medium">Medium</label>
-                <input type="radio" name="todoPriority" id="todo-priority-medium">
+                <input type="radio" name="todoPriority" id="todo-priority-medium" value="Medium">
                 <label for="todo-priority-low">Low</label>
-                <input type="radio" name="todoPriority" id="todo-priority-low">
+                <input type="radio" name="todoPriority" id="todo-priority-low" value="Low">
             </div>
             <button type="submit" id="submit-todo">Add</button>
+        </form>
+    </dialog>
+    <dialog id="modal-configure">
+        <form id="form-configure">
+            <div id="configure-title">
+                <label for="configure-title-input">Title</label>
+                <input type="text" name="configureTitle" id="configure-title-input" required>
+            </div>
+            <div id="configure-description">
+                <label for="configure-description-input">Description</label>
+                <input type="text" name="configureDescription" id="configure-description-input" required>
+            </div>
+            <div id="configure-date">
+                <label for="configure-date-input">Date</label>
+                <input type="date" name="configureDate" id="configure-date-input" required>
+            </div>
+            <div id="configure-priority">
+                <label for="configure-priority-high">High</label>
+                <input type="radio" name="configurePriority" id="configure-priority-high" checked value="High">
+                <label for="configure-priority-medium">Medium</label>
+                <input type="radio" name="configurePriority" id="configure-priority-medium" value="Medium">
+                <label for="configure-priority-low">Low</label>
+                <input type="radio" name="configurePriority" id="configure-priority-low" value="Low">
+            </div>
+            <button type="submit" id="submit-configure">Add</button>
         </form>
     </dialog>
     <div id="heading">Todo List</div>
